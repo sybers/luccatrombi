@@ -5,11 +5,11 @@
  *   BASE_URL=... AUTH_TOKEN=... deno run --allow-net --allow-read --allow-env main.ts
  *
  * Options:
- *   DEBUG=true  Affiche les logs detailles
+ *   DEBUG=true  Show detailed logs
  *
- * Le token se trouve dans les cookies du navigateur (authToken=...)
- * Avant de lancer ce script, recuperez les SHA1 des images des employes avec le script build-sha1-browser.js
- * et copiez le resultat dans le fichier sha1-map.json
+ * The token can be found in the browser cookies (authToken=...)
+ * Before running this script, get the SHA1 hashes of employee images using build-sha1-browser.js
+ * and copy the result into sha1-map.json
  */
 
 import { loadSha1Map } from "./lib/sha1-map.ts";
@@ -37,8 +37,8 @@ async function main(): Promise<void> {
       "Usage: BASE_URL=... AUTH_TOKEN=... deno run --allow-net --allow-read --allow-env main.ts"
     );
     console.log("");
-    console.log("Le token se trouve dans les cookies du navigateur.");
-    console.log("Ouvre DevTools > Application > Cookies > authToken");
+    console.log("The token can be found in your browser cookies.");
+    console.log("Open DevTools > Application > Cookies > authToken");
     Deno.exit(1);
   }
 
@@ -51,9 +51,9 @@ async function main(): Promise<void> {
   log("============================\n");
 
   const sha1Map = loadSha1Map();
-  log(`${Object.keys(sha1Map).length} SHA1 charges\n`);
+  log(`${Object.keys(sha1Map).length} SHA1 hashes loaded\n`);
 
-  log("Creation d'une nouvelle partie...");
+  log("Creating a new game...");
   const game = await createGame(config);
   const gameId = game.id;
   log(`   Game ID: ${gameId}`);
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
     let suggestion = null;
 
     if (!targetName) {
-      log(`   SHA1 inconnu: ${hash.substring(0, 12)}...`);
+      log(`   Unknown SHA1: ${hash.substring(0, 12)}...`);
       suggestion =
         question.suggestions[
           Math.floor(Math.random() * question.suggestions.length)
@@ -84,7 +84,7 @@ async function main(): Promise<void> {
       suggestion = findCorrectSuggestion(question.suggestions, targetName);
 
       if (!suggestion) {
-        log(`   "${targetName}" non trouve dans les suggestions`);
+        log(`   "${targetName}" not found in suggestions`);
         log(
           `      Suggestions: ${question.suggestions.map((s) => s.value).join(", ")}`
         );
@@ -104,20 +104,20 @@ async function main(): Promise<void> {
       const correctName =
         question.suggestions.find((s) => s.id === result.correctSuggestionId)
           ?.value || "?";
-      log(`   ${suggestion.value} (etait: ${correctName})`);
+      log(`   ${suggestion.value} (was: ${correctName})`);
     }
     totalScore += result.score;
   }
 
   console.log("\n============================");
-  console.log(`Score final: ${totalScore} pts`);
+  console.log(`Final score: ${totalScore} pts`);
   console.log(`   Correct: ${correct}/${MAX_QUESTIONS}`);
   console.log(`   Incorrect: ${incorrect}/${MAX_QUESTIONS}`);
 }
 
 if (import.meta.main) {
   main().catch((err) => {
-    console.error("Erreur:", err.message);
+    console.error("Error:", err.message);
     Deno.exit(1);
   });
 }
