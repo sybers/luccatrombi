@@ -1,24 +1,24 @@
 /**
- * Script à exécuter dans la console du navigateur sur la page du trombinoscope
+ * Script to run in the browser console on the directory page
  * $BASE_URL/directory/users/cards
  *
- * IMPORTANT: Avant de lancer ce script, scrolle jusqu'en bas de la page
- * pour charger tous les employés (infinite scroll).
+ * IMPORTANT: Before running this script, scroll to the bottom of the page
+ * to load all employees (infinite scroll).
  *
  * Usage:
- * 1. Va sur $BASE_URL/directory/users/cards
- * 2. Scroll jusqu'en bas pour charger tous les employés
- * 3. Ouvre la console (F12 > Console)
- * 4. Copie-colle ce script et appuie sur Entrée
- * 5. Attends que le script finisse (quelques minutes)
- * 6. Copie le JSON dans le fichier sha1-map.json
+ * 1. Go to $BASE_URL/directory/users/cards
+ * 2. Scroll to the bottom to load all employees
+ * 3. Open the console (F12 > Console)
+ * 4. Copy-paste this script and press Enter
+ * 5. Wait for the script to finish (a few minutes)
+ * 6. Copy the JSON into the sha1-map.json file
  */
 
 (async function buildSha1Map() {
-    console.log('🚀 Démarrage du build SHA1...');
+    console.log('🚀 Starting SHA1 build...');
 
     const tiles = document.querySelectorAll('li[trombi-user-tile]');
-    console.log(`📋 ${tiles.length} employés trouvés sur la page`);
+    console.log(`📋 ${tiles.length} employees found on page`);
 
     const employees = [];
     for (const tile of tiles) {
@@ -33,7 +33,7 @@
         }
     }
 
-    console.log(`📸 ${employees.length} employés avec photo`);
+    console.log(`📸 ${employees.length} employees with photo`);
 
     const sha1Map = {};
     let completed = 0;
@@ -54,15 +54,15 @@
         }));
 
         const percent = Math.round((completed / employees.length) * 100);
-        console.log(`⏳ Progression: ${completed}/${employees.length} (${percent}%) - ${errors} erreurs`);
+        console.log(`⏳ Progress: ${completed}/${employees.length} (${percent}%) - ${errors} errors`);
     }
 
     console.log('');
-    console.log('✅ Terminé !');
-    console.log('📦 Backup JSON (copie-le dans le fichier sha1-map.json):');
+    console.log('✅ Done!');
+    console.log('📦 Backup JSON (copy it into the sha1-map.json file):');
     console.log(JSON.stringify(sha1Map));
     console.log('');
-    console.log('Tu peux maintenant utiliser le script cheat.js !');
+    console.log('You can now use the cheat.js script!');
 
     return sha1Map;
 })();
@@ -80,7 +80,7 @@ async function getImageSha1(url) {
         const arrayBuffer = await response.arrayBuffer();
         return await sha1(arrayBuffer);
     } catch (e) {
-        console.warn(`Erreur pour ${url}:`, e.message);
+        console.warn(`Error for ${url}:`, e.message);
         return null;
     }
 }
